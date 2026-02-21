@@ -1,0 +1,6 @@
+# Ignorar dependencias de Node.js
+node_modules/
+
+# Puedes agregar otros artefactos generados
+# dist/
+# build/
