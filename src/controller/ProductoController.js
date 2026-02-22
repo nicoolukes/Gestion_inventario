@@ -1,5 +1,4 @@
-
-
+ 
 class ProductoController {
     constructor(productoService) {
         this.productoService = productoService
@@ -21,7 +20,8 @@ class ProductoController {
             const mensaje = await this.productoService.agregarProducto(dataProduct);
             res.status(201).json(mensaje);
         }catch{
-            res.status(500).json({erro: "Error al cargar el producto"})
+            console.error("❌ ERROR REAL:", error); // Esto imprimirá el fallo exacto en tu consola de VS Code
+            res.status(500).json({ erro: "Error al cargar", detalle: error.message });
         }
         
     }
@@ -40,10 +40,33 @@ class ProductoController {
                 detalle: req.body.detalle,
                 categoria: req.body.categoria
             }
-            const mensaje = await this.productoService.agregarProducto(id, dataProduct);
+            const mensaje = await this.productoService.modificarProducto(id, dataProduct);
             return res.status(200).json(mensaje);
-        }catch{
-            res.status(500).json({erro: "Error al modificar el producto"})
+        }catch(error){
+            console.error("❌ ERROR REAL:", error); // Esto imprimirá el fallo exacto en tu consola de VS Code
+            res.status(500).json({ erro: "Error al modificar", detalle: error.message });
+        }
+    }
+
+    async listarProducto(req, res){
+        try{
+            
+            const producto = await this.productoService.listarProducto();
+            return res.status(200).json(producto);
+        }catch (error){
+            console.error("❌ ERROR REAL:", error); // Esto imprimirá el fallo exacto en tu consola de VS Code
+            res.status(500).json({ erro: "Error al listar", detalle: error.message });
+        }
+    }
+
+    async eliminarProducto(req, res){
+        try{
+            const {id}= req.params;
+            const mensaje = await this.productoService.eliminarProducto(id);
+            return res.status(200).json(mensaje);
+        }catch(error){
+            console.error("❌ ERROR REAL:", error); // Esto imprimirá el fallo exacto en tu consola de VS Code
+            res.status(500).json({ erro: "Error al eliminar", detalle: error.message });
         }
     }
 
