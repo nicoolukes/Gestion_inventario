@@ -16,5 +16,8 @@ app.get("/test", (req, res) => {
     res.send("El servidor responde correctamente");
 });*/
 app.post("/cargarProducto", imagen.single('imagen') ,(req, res) => productoController.agregarProducto(req, res));
+app.put("/modificarProducto/:id", imagen.single('imagen'), (req, res) => productoController.modificarProducto(req, res));
+app.get("/listarProducto", (req, res) => productoController.listarProducto(req, res));
+app.delete("/eliminarProducto/:id", (req, res) => productoController.eliminarProducto(req, res))
 
 module.exports = app;

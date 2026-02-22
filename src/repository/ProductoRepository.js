@@ -38,6 +38,7 @@ class ProductoRepository {
                 detalle= $7, 
                 categoria= $8
             WHERE id_producto = $9
+            RETURNING *;
         `;
 
         const values=[
@@ -53,6 +54,25 @@ class ProductoRepository {
         ];
 
         const result = await this.pool.query(query, values);
+        return result.rows[0];
+    }
+
+    async listarProducto(){
+        const query= `
+            SELECT * from producto
+            
+        `;
+        
+        const result = await this.pool.query(query);
+        return result.rows
+    }
+
+    async eliminarProducto(id){
+        const query = `
+            DELETE FROM producto WHERE id_producto = $1 RETURNING *;
+
+        `;
+        const result = await this.pool.query(query, [id]);
         return result.rows[0];
     }
 }
