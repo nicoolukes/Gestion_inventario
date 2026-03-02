@@ -1,10 +1,12 @@
+const e = require("express");
+
  
 class ProductoController {
     constructor(productoService) {
         this.productoService = productoService
     }
 
-    async agregarProducto(req, res) {
+    async agregarProducto(req, res, next) {
         try {
             const rutaImagen = req.file ? `/imagenes/${req.file.filename}` : null;
             const dataProduct = {
@@ -19,14 +21,13 @@ class ProductoController {
             }
             const mensaje = await this.productoService.agregarProducto(dataProduct);
             res.status(201).json(mensaje);
-        }catch{
-            console.error("❌ ERROR REAL:", error); // Esto imprimirá el fallo exacto en tu consola de VS Code
-            res.status(500).json({ erro: "Error al cargar", detalle: error.message });
+        }catch(error){
+            next(error);
         }
         
     }
 
-    async modificarProducto(req, res){
+    async modificarProducto(req, res, next){
         try{
             const rutaImagen = req.file ? `/imagenes/${req.file.filename}` : null;
             const {id} = req.params;
@@ -43,31 +44,38 @@ class ProductoController {
             const mensaje = await this.productoService.modificarProducto(id, dataProduct);
             return res.status(200).json(mensaje);
         }catch(error){
-            console.error("❌ ERROR REAL:", error); // Esto imprimirá el fallo exacto en tu consola de VS Code
-            res.status(500).json({ erro: "Error al modificar", detalle: error.message });
+            next(error);
         }
     }
 
-    async listarProducto(req, res){
+    async listarProducto(req, res, next){
         try{
-            
             const producto = await this.productoService.listarProducto();
             return res.status(200).json(producto);
         }catch (error){
-            console.error("❌ ERROR REAL:", error); // Esto imprimirá el fallo exacto en tu consola de VS Code
-            res.status(500).json({ erro: "Error al listar", detalle: error.message });
+           next(error);
         }
     }
 
-    async eliminarProducto(req, res){
+    async eliminarProducto(req, res, next){
         try{
             const {id}= req.params;
             const mensaje = await this.productoService.eliminarProducto(id);
             return res.status(200).json(mensaje);
         }catch(error){
-            console.error("❌ ERROR REAL:", error); // Esto imprimirá el fallo exacto en tu consola de VS Code
-            res.status(500).json({ erro: "Error al eliminar", detalle: error.message });
+            next(error);
         }
+    }
+
+    async buscarProducto(req, res, next){
+        try{
+            const {nombre, categoria}= req.query;
+            const productos = await this.productoService.buscarProducto(nombre, categoria);
+            return res.status(200).json(productos);
+        }catch(error){
+            next(error);
+        }
+
     }
 
 }

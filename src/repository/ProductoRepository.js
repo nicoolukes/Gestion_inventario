@@ -60,7 +60,6 @@ class ProductoRepository {
     async listarProducto(){
         const query= `
             SELECT * from producto
-            
         `;
         
         const result = await this.pool.query(query);
@@ -74,6 +73,50 @@ class ProductoRepository {
         `;
         const result = await this.pool.query(query, [id]);
         return result.rows[0];
+    }
+
+    async buscarProducto(nombre, categoria){
+        const query = `
+            SELECT * FROM producto 
+            WHERE 1=1;
+        `
+        const value = [];
+
+        if(nombre){
+            value.push(`%${nombre}%`);
+            query+= `AND nombre ILIKE $${value.length}`;
+        }
+
+        if(categoria){
+            value.push(categoria);
+            query+= `AND categoria = $${value.length}`
+        }
+
+        query+= `ORDER BY nombre ASC`;
+
+        const result = await this.pool.query(query, value);
+        return result.rows;
+    }
+
+    async traerProducto(id, client){
+        const executor = client || this.pool;
+        const query = `
+            SELECT * FROM producto
+            WHERE id_producto = ANY($1)
+            FOR UPDATE
+        `;
+
+        const result = await executor.query(query, [id]);
+
+        return result.rows[0];
+    }
+
+    async actualizarStock(stock, id, client){
+        const executor = client || this.pool;
+        const query =`
+            "SELECT * FROM producto WHERE id_producto = $1 FOR UPDATE"
+        `
+        await executor.query(query, [id]);
     }
 }
 
