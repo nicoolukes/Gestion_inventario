@@ -21,13 +21,15 @@ const AsignarController = require('./controller/AsignarController');
 const AsignarService = require('./service/AsignarService');
 const AsignarRepository = require('./repository/AsignarRepository');
 
-const pool = require('./config/DBConfig')
-const imagen = require('./config/MulterConfig');
-
-;
+/*Pesona */
 const PersonaRepository = require('./repository/PersonaRepository');
 const PersonaService = require('./service/PersonaService');
 const PersonaController = require('./controller/PersonaController');
+
+const pool = require('./config/DBConfig')
+const imagen = require('./config/MulterConfig');
+
+
 
 const app = express();
 app.use(express.json());
@@ -49,23 +51,14 @@ const ventaController = new VentaControler(ventaService);
 const asignarRepository = new AsignarRepository(pool);
 const asignarService = new AsignarService(asignarRepository, cajaRepository);
 const asignarController = new AsignarController(asignarService)
-
-
+/*Persona */
+const personaRepository = new PersonaRepository(pool)
+const personaService = new PersonaService(personaRepository);
+const personaController = new PersonaController(personaService);
 /*console.log(">>> INTENTANDO REGISTRAR RUTAS <<<");
 app.get("/test", (req, res) => {
     res.send("El servidor responde correctamente");
 });*/
-
-const personaRepository = new PersonaRepository(pool)
-const personaService = new PersonaService(personaRepository);
-const personaController = new PersonaController(personaService);
-
-
-
-
-
-
-
 
 
 
@@ -85,7 +78,7 @@ app.delete("/eliminarMovimiento/:id", (req, res, next) => cajaController.elimina
 app.post("/registrarVenta", (req, res, next) => ventaController.registrarVenta(req, res, next));
 app.get("/listarVenta", (req, res, next) => ventaController.listarVenta(req, res, next));
 app.get("/buscarVenta", (req, res, next) => ventaController.buscarVenta(req, res, next));
-app.put("/anularVenta/:id", (req, res, next) => ventaController.anularVenta(req, res, next));
+app.delete("/anularVenta/:id", (req, res, next) => ventaController.eliminarVenta(req, res, next));
 
 /*Asignacion */
 app.post("/registrarAsignacion", (req, res, next) => asignarController.registrarAsignacion(req, res, next));

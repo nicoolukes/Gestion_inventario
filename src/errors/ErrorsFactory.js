@@ -3,7 +3,7 @@ const AppErrors = require('./AppErrors');
 class ErrorsFactory{
 
     static errorInterno() {
-        return new AppError(
+        return new AppErrors(
             "Error interno del servidor",
             500,
             "INTERNAL_ERROR"
