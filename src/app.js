@@ -72,7 +72,7 @@ app.delete("/eliminarMovimiento/:id", (req, res, next) => cajaController.elimina
 app.post("/registrarVenta", (req, res, next) => ventaController.registrarVenta(req, res, next));
 app.get("/listarVenta", (req, res, next) => ventaController.listarVenta(req, res, next));
 app.get("/buscarVenta", (req, res, next) => ventaController.buscarVenta(req, res, next));
-app.delete("/eliminarVenta/:id", (req, res, next) => ventaController.eliminarVenta(req, res, next));
+app.put("/anularVenta/:id", (req, res, next) => ventaController.anularVenta(req, res, next));
 
 /*Asignacion */
 app.post("/registrarAsignacion", (req, res, next) => asignarController.registrarAsignacion(req, res, next));

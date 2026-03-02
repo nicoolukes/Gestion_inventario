@@ -90,22 +90,17 @@ class VentaRepository {
         return result.rows;
     }
 
-    async eliminarVenta(id) {
-
-        const query1 = `
-            DELETE FROM detalle_venta WHERE id_venta = $1; 
+    async anularVenta(id, client) {
+        const executor = client || this.pool
+        const query = `
+            UPDATE venta
+            SET
+                estado: "ANULADA"
+            WHERE id_venta = $1; 
         `;
-        const query2 = `
-            DELETE FROM caja WHERE id_venta = $1;
-        `;
-        const query3 = `
-            DELETE FROM venta WHERE id_venta = $1 RETURNING *;
-        `;
-
-        await this.pool.query(query1, [id]);
-        await this.pool.query(query2, [id]);
-        const result = await this.pool.query(query3, [id]);
-        return result.rows[0];
+        
+        await executor.query(query, [id]);
+        
 
     }
 
