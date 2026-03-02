@@ -24,7 +24,10 @@ const AsignarRepository = require('./repository/AsignarRepository');
 const pool = require('./config/DBConfig')
 const imagen = require('./config/MulterConfig');
 
-
+;
+const PersonaRepository = require('./repository/PersonaRepository');
+const PersonaService = require('./service/PersonaService');
+const PersonaController = require('./controller/PersonaController');
 
 const app = express();
 app.use(express.json());
@@ -53,6 +56,16 @@ app.get("/test", (req, res) => {
     res.send("El servidor responde correctamente");
 });*/
 
+const personaRepository = new PersonaRepository(pool)
+const personaService = new PersonaService(personaRepository);
+const personaController = new PersonaController(personaService);
+
+
+
+
+
+
+
 
 
 
@@ -79,5 +92,22 @@ app.post("/registrarAsignacion", (req, res, next) => asignarController.registrar
 app.put("/modificarAsignacion", (req, res, next) => asignarController.modificarAsignacion(req, res, next));
 
 app.use(errorMiddleware);
+
+// RUTAS PERSONA
+app.post("/cargarPersona", (req, res) =>
+    personaController.agregarPersona(req, res)
+);
+
+app.put("/modificarPersona/:id", (req, res) =>
+    personaController.modificarPersona(req, res)
+);
+
+app.get("/listarPersona", (req, res) =>
+    personaController.listarPersona(req, res)
+);
+
+app.delete("/eliminarPersona/:id", (req, res) =>
+    personaController.eliminarPersona(req, res)
+);
 
 module.exports = app;
