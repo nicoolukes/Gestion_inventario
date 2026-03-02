@@ -114,7 +114,10 @@ class ProductoRepository {
     async actualizarStock(stock, id, client){
         const executor = client || this.pool;
         const query =`
-            "SELECT * FROM producto WHERE id_producto = $1 FOR UPDATE"
+            UPDATE producto
+            SET 
+                stock= ${stock}
+            WHERE id_producto = $1 "
         `
         await executor.query(query, [id]);
     }

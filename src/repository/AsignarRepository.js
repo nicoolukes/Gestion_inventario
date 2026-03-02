@@ -51,6 +51,14 @@ class AsignarRepository{
         const result = await this.pool.query(query);
         return result.rows[0] ?? null;
     }
+
+    async traerResponsable(id){
+        const query = `
+            SELECT id_persona FROM asignacion_turno
+            WHERE id_persona = $1 AND hora_fin_real IS NULL;
+        `
+        const result = await this.pool.query(query, [id]);
+    }
 }
 
 module.exports = AsignarRepository;

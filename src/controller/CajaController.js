@@ -25,7 +25,7 @@ class CajaController {
             }
 
             const mensaje = await this.cajaService.movimientoCaja(dataCaja);
-            return res.status(200).json(mensaje);
+            return res.status(201).json(mensaje);
         } catch (error) {
             next(error);
         }

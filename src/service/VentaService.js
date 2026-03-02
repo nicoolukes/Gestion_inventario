@@ -167,11 +167,16 @@ class VentaService {
 
             await this.ventaRepo.anularVenta(venta.id_venta);
 
-            await client.query('COMMIT')
+            await client.query('COMMIT');
+
+            return{mensaje: "Venta anulada correctamente", id }
 
 
         }catch(error){
-
+            await client.query('ROLLBACK');
+            throw error;
+        }finally{
+            client.release;
         }
 
         /*const detalle = await this.ventaRepo.buscarDetalle(id);
